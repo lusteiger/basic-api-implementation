@@ -1,5 +1,7 @@
 package com.thoughtworks.rslist.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.rslist.dto.Events;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,7 @@ public class RsController {
 
         return initlist;
     }
+
     private List<Events> rsList = initList();
 
 
@@ -29,15 +32,17 @@ public class RsController {
 
     @GetMapping("/rs/event")
     private List<Events> getStartUntilEnd(@RequestParam(required = false) Integer start,
-                                    @RequestParam(required = false) Integer end) {
-        if (start == null ||end == null) {
+                                          @RequestParam(required = false) Integer end) {
+        if (start == null || end == null) {
             return rsList;
         }
-        return rsList.subList(start-1,end);
+        return rsList.subList(start - 1, end);
     }
 
     @PostMapping("/rs/event")
-    private void addEvent(@RequestBody Events events){
-        rsList.add(events);
+    private void addEvent(@RequestBody String events) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Events addEvent = objectMapper.readValue(events, Events.class);
+        rsList.add(addEvent);
     }
 }
