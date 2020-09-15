@@ -46,7 +46,7 @@ public class RsController {
         rsList.add(addEvent);
     }
 
-    @PostMapping("/rs/eventModify/{index}")
+    @PutMapping("/rs/eventModify/{index}")
     private void ModifyEvent(@RequestBody String events,@PathVariable int index) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Events modifyEvent = objectMapper.readValue(events,Events.class);
@@ -60,5 +60,8 @@ public class RsController {
         rsList.set(index-1,modifyEvent);
     }
 
-
+    @DeleteMapping("/rs/eventDelete/{index}")
+    private void DeleteEvent(@PathVariable int index){
+        rsList.remove(index-1);
+    }
 }
