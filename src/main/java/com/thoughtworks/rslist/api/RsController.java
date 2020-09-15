@@ -18,7 +18,11 @@ public class RsController {
     }
 
     @GetMapping("/rs/event")
-    private String getStartUntilEnd(@RequestParam int start, @RequestParam int end){
+    private String getStartUntilEnd(@RequestParam(required = false) Integer start,
+                                    @RequestParam(required = false) Integer end){
+        if (start == null){
+            return rsList.toString();
+        }
         return rsList.subList(start-1,end).toString();
     }
 }
