@@ -57,21 +57,18 @@ public class RsController {
     @PostMapping("/rs/eventAdd")
     private ResponseEntity<List<Events>> addEvent(@RequestBody Events events) {
         Boolean register = false;
+
         for (int i = 0; i < rsList.size(); i++) {
             if (events.getUser().equals(rsList.get(i).getUser())) {
                 register = true;
                 break;
             }
         }
-        if (register) {
-            rsList.add(events);
-            return ResponseEntity.ok().body(rsList);
-        } else {
-            rsList.add(events);
+        if (!register) {
             new UserController().register(events.getUser());
-            return ResponseEntity.ok().body(rsList);
         }
-
+        rsList.add(events);
+        return ResponseEntity.status(201).header("index",String.valueOf(rsList.size()-1)).body(rsList);
     }
 
     @PutMapping("/rs/eventModify/{index}")

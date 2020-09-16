@@ -124,7 +124,8 @@ class RsControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(events);
         mockMvc.perform(post("/rs/eventAdd").content(json).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().is(201))
+                .andExpect(header().string("index","3"));
         mockMvc.perform(get("/rs/event"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(4)))
@@ -205,7 +206,8 @@ class RsControllerTest {
         String EventJson = objectMapper.writeValueAsString(events);
         String UserJson = objectMapper.writeValueAsString(user);
         mockMvc.perform(post("/rs/eventAdd").content(EventJson).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(header().string("index","3"))
+                .andExpect(status().is(201));
         mockMvc.perform(get("/rs/event"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(4)))
@@ -279,7 +281,7 @@ class RsControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(events);
         mockMvc.perform(post("/rs/eventAdd").content(json).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().is(201));
         mockMvc.perform(get("/rs/event"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(4)))
