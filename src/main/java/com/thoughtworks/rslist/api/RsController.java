@@ -17,15 +17,14 @@ import java.util.List;
 public class RsController {
 
 
-
     public List<Events> InitList() {
         List<Events> initList = new ArrayList<>();
         initList.add(new Events("第一条事件", "无主题",
-                new User("小钱", 18, "female", "twuc@thoughtworks.com","11234567890")));
+                new User("小钱", 18, "female", "twuc@thoughtworks.com", "11234567890")));
         initList.add(new Events("第二条事件", "无主题",
-                new User("小李", 30, "male", "twuc@thoughtworks.com","11234567890")));
+                new User("小李", 30, "male", "twuc@thoughtworks.com", "11234567890")));
         initList.add(new Events("第三条事件", "无主题",
-                new User("小张", 23, "male", "twuc@thoughtworks.com","11234567890")));
+                new User("小张", 23, "male", "twuc@thoughtworks.com", "11234567890")));
 
         return initList;
     }
@@ -33,46 +32,50 @@ public class RsController {
     private List<Events> rsList = InitList();
 
     @GetMapping("/rs/list")
-    public List<Events> getAllRsEvent() {
-        return rsList;
+    public ResponseEntity<List<Events>> getAllRsEvent() {
+        return ResponseEntity.ok().body(rsList);
     }
 
 
     @GetMapping("/rs/{index}")
-    private String getOneEvent(@PathVariable int index) {
-        return rsList.get(index - 1).getEvent().toString();
+    private ResponseEntity<Events> getOneEvent(@PathVariable int index) {
+
+        return ResponseEntity.ok().body(rsList.get(index - 1));
+
     }
 
     @GetMapping("/rs/event")
-    private List<Events> getStartUntilEnd(@RequestParam(required = false) Integer start,
-                                          @RequestParam(required = false) Integer end) {
+    private ResponseEntity<List<Events>> getStartUntilEnd(@RequestParam(required = false) Integer start,
+                                                          @RequestParam(required = false) Integer end) {
         if (start == null || end == null) {
-            return rsList;
+
+            return ResponseEntity.ok().body(rsList);
         }
-        return rsList.subList(start - 1, end);
+        return ResponseEntity.ok().body(rsList.subList(start - 1, end));
     }
 
     @PostMapping("/rs/eventAdd")
-    private void addEvent(@RequestBody Events events) {
+    private ResponseEntity<List<Events>> addEvent(@RequestBody Events events) {
         Boolean register = false;
         for (int i = 0; i < rsList.size(); i++) {
-            if (events.getUser().equals(rsList.get(i).getUser())){
+            if (events.getUser().equals(rsList.get(i).getUser())) {
                 register = true;
                 break;
             }
         }
-        if (register){
+        if (register) {
             rsList.add(events);
-        }
-        else {
+            return ResponseEntity.ok().body(rsList);
+        } else {
             rsList.add(events);
             new UserController().register(events.getUser());
+            return ResponseEntity.ok().body(rsList);
         }
 
     }
 
     @PutMapping("/rs/eventModify/{index}")
-    private void ModifyEvent(@RequestBody String events, @PathVariable int index) throws JsonProcessingException {
+    private ResponseEntity<List<Events>>  ModifyEvent(@RequestBody String events, @PathVariable int index) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Events modifyEvent = objectMapper.readValue(events, Events.class);
         if (modifyEvent.getEvent() == null) {
@@ -81,13 +84,13 @@ public class RsController {
         if (modifyEvent.getKeywords() == null) {
             modifyEvent.setKeywords(rsList.get(index - 1).getKeywords());
         }
-
-
         rsList.set(index - 1, modifyEvent);
+        return ResponseEntity.ok().body(rsList);
     }
 
     @DeleteMapping("/rs/eventDelete/{index}")
-    private void DeleteEvent(@PathVariable int index) {
+    private ResponseEntity<List<Events>>  DeleteEvent(@PathVariable int index) {
         rsList.remove(index - 1);
+        return ResponseEntity.ok().body(rsList);
     }
 }

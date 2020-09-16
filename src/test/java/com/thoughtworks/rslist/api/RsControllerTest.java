@@ -33,7 +33,13 @@ class RsControllerTest {
     void should_get_one_rs_event() throws Exception {
         mockMvc.perform(get("/rs/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("第一条事件"));
+                .andExpect(jsonPath("event", is("第一条事件")))
+                .andExpect(jsonPath("keywords", is("无主题")))
+                .andExpect(jsonPath("user.userName", is("小钱")))
+                .andExpect(jsonPath("user.age", is(18)))
+                .andExpect(jsonPath("user.gender", is("female")))
+                .andExpect(jsonPath("user.email", is("twuc@thoughtworks.com")))
+                .andExpect(jsonPath("user.phone", is("11234567890")));
     }
 
     @Test
@@ -81,7 +87,7 @@ class RsControllerTest {
         mockMvc.perform(get("/user/query"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].userName",is("小张")))
+                .andExpect(jsonPath("$[0].userName", is("小张")))
                 .andExpect(jsonPath("$[0].age", is(23)))
                 .andExpect(jsonPath("$[0].gender", is("male")))
                 .andExpect(jsonPath("$[0].email", is("twuc@thoughtworks.com")))
@@ -152,11 +158,10 @@ class RsControllerTest {
                 .andExpect(jsonPath("$[3].user.phone", is("11234567890")));
 
 
-
         mockMvc.perform(get("/user/query"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].userName",is("小张")))
+                .andExpect(jsonPath("$[0].userName", is("小张")))
                 .andExpect(jsonPath("$[0].age", is(23)))
                 .andExpect(jsonPath("$[0].gender", is("male")))
                 .andExpect(jsonPath("$[0].email", is("twuc@thoughtworks.com")))
@@ -236,7 +241,7 @@ class RsControllerTest {
         mockMvc.perform(get("/user/query"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].userName",is("小张")))
+                .andExpect(jsonPath("$[0].userName", is("小张")))
                 .andExpect(jsonPath("$[0].age", is(23)))
                 .andExpect(jsonPath("$[0].gender", is("male")))
                 .andExpect(jsonPath("$[0].email", is("twuc@thoughtworks.com")))
@@ -248,22 +253,19 @@ class RsControllerTest {
         mockMvc.perform(get("/user/query"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].userName",is("小张")))
+                .andExpect(jsonPath("$[0].userName", is("小张")))
                 .andExpect(jsonPath("$[0].age", is(23)))
                 .andExpect(jsonPath("$[0].gender", is("male")))
                 .andExpect(jsonPath("$[0].email", is("twuc@thoughtworks.com")))
                 .andExpect(jsonPath("$[0].phone", is("11234567890")))
-                .andExpect(jsonPath("$[1].userName",is("老李")))
+                .andExpect(jsonPath("$[1].userName", is("老李")))
                 .andExpect(jsonPath("$[1].age", is(80)))
                 .andExpect(jsonPath("$[1].gender", is("male")))
                 .andExpect(jsonPath("$[1].email", is("twuc@thoughtworks.com")))
                 .andExpect(jsonPath("$[1].phone", is("11234567890")));
 
 
-
     }
-
-
 
 
     @Test
