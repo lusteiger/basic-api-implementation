@@ -23,7 +23,6 @@ public class UserController {
         return initList;
     }
 
-
     private List<User> userList = init();
 
     @PostMapping("/user/register")
