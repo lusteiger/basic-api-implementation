@@ -31,6 +31,7 @@ public class RsController {
     }
 
     private List<Events> rsList = InitList();
+
     @JsonView(Events.WithoutUser.class)
     @GetMapping("/rs/list")
     public ResponseEntity<List<Events>> getAllRsEvent() {
@@ -41,6 +42,8 @@ public class RsController {
     @GetMapping("/rs/{index}")
     private ResponseEntity<Events> getOneEvent(@PathVariable int index) {
 
+        if (index < 0 || index >= rsList.size())
+            throw new IndexOutOfBoundsException("invalid request param");
         return ResponseEntity.ok().body(rsList.get(index - 1));
 
     }
@@ -53,7 +56,7 @@ public class RsController {
             return ResponseEntity.ok().body(rsList);
         }
 
-        if (start<0 || end>= rsList.size()||start>= rsList.size()) {
+        if (start < 0 || end >= rsList.size() || start >= rsList.size()) {
             throw new IndexOutOfBoundsException("invalid request param");
         }
         return ResponseEntity.ok().body(rsList.subList(start - 1, end));
@@ -73,11 +76,11 @@ public class RsController {
             new UserController().register(events.getUser());
         }
         rsList.add(events);
-        return ResponseEntity.status(201).header("index",String.valueOf(rsList.size()-1)).body(rsList);
+        return ResponseEntity.status(201).header("index", String.valueOf(rsList.size() - 1)).body(rsList);
     }
 
     @PutMapping("/rs/eventModify/{index}")
-    private ResponseEntity<List<Events>>  ModifyEvent(@RequestBody String events, @PathVariable int index) throws JsonProcessingException {
+    private ResponseEntity<List<Events>> ModifyEvent(@RequestBody String events, @PathVariable int index) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Events modifyEvent = objectMapper.readValue(events, Events.class);
         if (modifyEvent.getEvent() == null) {
@@ -91,7 +94,7 @@ public class RsController {
     }
 
     @DeleteMapping("/rs/eventDelete/{index}")
-    private ResponseEntity<List<Events>>  DeleteEvent(@PathVariable int index) {
+    private ResponseEntity<List<Events>> DeleteEvent(@PathVariable int index) {
         rsList.remove(index - 1);
         return ResponseEntity.ok().body(rsList);
     }

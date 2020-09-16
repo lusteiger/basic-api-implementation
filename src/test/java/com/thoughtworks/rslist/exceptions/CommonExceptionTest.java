@@ -21,8 +21,15 @@ class CommonExceptionTest {
     MockMvc mockMvc;
 
     @Test
-    void should_return_exception_out_of_index() throws Exception {
+    void should_return_exception_start_and_end_out_of_index() throws Exception {
         mockMvc.perform(get("/rs/event?start=1&end=10"))
+                .andExpect(status().is(400))
+                .andExpect(jsonPath("error", is("invalid request param")));
+    }
+
+    @Test
+    void should_return_exception_index_out_of_index() throws Exception {
+        mockMvc.perform(get("/rs/20"))
                 .andExpect(status().is(400))
                 .andExpect(jsonPath("error", is("invalid request param")));
     }
