@@ -52,6 +52,10 @@ public class RsController {
 
             return ResponseEntity.ok().body(rsList);
         }
+
+        if (start<0 || end>= rsList.size()||start>= rsList.size()) {
+            throw new IndexOutOfBoundsException("invalid request param");
+        }
         return ResponseEntity.ok().body(rsList.subList(start - 1, end));
     }
 
