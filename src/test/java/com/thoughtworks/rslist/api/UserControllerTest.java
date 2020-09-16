@@ -258,4 +258,20 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void should_return_list_using_jsonProperty() throws Exception {
+
+        mockMvc.perform(get("/user/query"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].userName", is("小张")))
+                .andExpect(jsonPath("$[0].age", is(23)))
+                .andExpect(jsonPath("$[0].gender", is("male")))
+                .andExpect(jsonPath("$[0].email", is("twuc@thoughtworks.com")))
+                .andExpect(jsonPath("$[0].phone", is("11234567890")));
+
+
+    }
+
 }
