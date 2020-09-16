@@ -1,30 +1,19 @@
 package com.thoughtworks.rslist.dto;
 
+
+import lombok.*;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Events {
-    String event;
-    String keywords;
 
-    public Events() {
-    }
+    private String event;
+    private String keywords;
+    private User user;
 
-    public Events(String event, String keywords) {
-        this.event = event;
-        this.keywords = keywords;
-    }
 
-    public String getKeywords() {
-        return keywords;
-    }
 
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
-    }
-
-    public String getEvent() {
-        return event;
-    }
-
-    public void setEvent(String event) {
-        this.event = event;
-    }
 }

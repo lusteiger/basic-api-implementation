@@ -2,6 +2,7 @@ package com.thoughtworks.rslist.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.rslist.dto.Events;
+import com.thoughtworks.rslist.dto.User;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +85,8 @@ class RsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)));
 
-        Events events = new Events("猪肉涨价了", "经济");
+        User user = new User("xiaowang",19,"female","a@thoughtworks.com","18888888888");
+        Events events = new Events("添加一条热搜", "娱乐",user);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(events);
         mockMvc.perform(post("/rs/eventAdd").content(json).contentType(MediaType.APPLICATION_JSON))
@@ -98,8 +100,13 @@ class RsControllerTest {
                 .andExpect(jsonPath("$[1].keywords", is("无主题")))
                 .andExpect(jsonPath("$[2].event", is("第三条事件")))
                 .andExpect(jsonPath("$[2].keywords", is("无主题")))
-                .andExpect(jsonPath("$[3].event", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[3].keywords", is("经济")));
+                .andExpect(jsonPath("$[3].event", is("添加一条热搜")))
+                .andExpect(jsonPath("$[3].keywords", is("娱乐")))
+                .andExpect(jsonPath("$[3].user.userName",is("xiaowang")))
+                .andExpect(jsonPath("$[3].user.age",is(19)))
+                .andExpect(jsonPath("$[3].user.gender",is("female")))
+                .andExpect(jsonPath("$[3].user.email",is("a@thoughtworks.com")))
+                .andExpect(jsonPath("$[3].user.phone",is("18888888888")));
 
     }
 
@@ -108,7 +115,7 @@ class RsControllerTest {
         mockMvc.perform(get("/rs/event"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)));
-        Events events = new Events("比特币", null);
+        Events events = new Events("比特币", null,null);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(events);
         mockMvc.perform(put("/rs/eventModify/1").content(json).contentType(MediaType.APPLICATION_JSON))
@@ -129,7 +136,7 @@ class RsControllerTest {
         mockMvc.perform(get("/rs/event"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)));
-        Events events = new Events(null, "娱乐");
+        Events events = new Events(null, "娱乐",null);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(events);
         mockMvc.perform(put("/rs/eventModify/2").content(json).contentType(MediaType.APPLICATION_JSON))
@@ -150,7 +157,7 @@ class RsControllerTest {
         mockMvc.perform(get("/rs/event"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)));
-        Events events = new Events("世界杯", "体育");
+        Events events = new Events("世界杯", "体育",null);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(events);
         mockMvc.perform(put("/rs/eventModify/3").content(json).contentType(MediaType.APPLICATION_JSON))
