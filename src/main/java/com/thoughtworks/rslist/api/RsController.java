@@ -21,7 +21,7 @@ public class RsController {
     public List<Events> initList() {
         List<Events> initlist = new ArrayList<>();
         initlist.add(new Events("第一条事件", "无主题",
-                new User("小王", 18, "female", "twuc@thoughtworks.com","11234567890")));
+                new User("小钱", 18, "female", "twuc@thoughtworks.com","11234567890")));
         initlist.add(new Events("第二条事件", "无主题",new User("小李", 30, "male", "twuc@thoughtworks.com","11234567890")));
         initlist.add(new Events("第三条事件", "无主题",new User("小张", 12, "female", "twuc@thoughtworks.com","11234567890")));
 
