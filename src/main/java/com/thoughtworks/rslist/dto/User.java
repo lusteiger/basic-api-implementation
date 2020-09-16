@@ -21,5 +21,6 @@ public class User {
     private String gender;
     @Email
     private String email;
+    @Pattern(regexp = "^1\\d{10}$")
     private String phone;
 }
