@@ -128,4 +128,51 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest());
 
     }
+
+
+    @Test
+    void should_invalid_when_age_is_more_then_100() throws Exception {
+
+        User user = new User("asdasd",101 , "female", "twu@tw.com", "18812345678");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(user);
+
+        mockMvc.perform(get("/user/query"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].userName", is("小张")))
+                .andExpect(jsonPath("$[0].age", is(23)))
+                .andExpect(jsonPath("$[0].gender", is("male")))
+                .andExpect(jsonPath("$[0].email", is("twuc@thoughtworks.com")))
+                .andExpect(jsonPath("$[0].phone", is("11234567890")));
+        mockMvc.perform(post("/user/register")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void should_invalid_when_age_is_less_then_18() throws Exception {
+
+        User user = new User("asdasd",17 , "female", "twu@tw.com", "18812345678");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(user);
+
+        mockMvc.perform(get("/user/query"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].userName", is("小张")))
+                .andExpect(jsonPath("$[0].age", is(23)))
+                .andExpect(jsonPath("$[0].gender", is("male")))
+                .andExpect(jsonPath("$[0].email", is("twuc@thoughtworks.com")))
+                .andExpect(jsonPath("$[0].phone", is("11234567890")));
+        mockMvc.perform(post("/user/register")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+
 }
