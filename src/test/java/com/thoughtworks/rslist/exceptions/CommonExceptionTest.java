@@ -31,6 +31,6 @@ class CommonExceptionTest {
     void should_return_exception_index_out_of_index() throws Exception {
         mockMvc.perform(get("/rs/20"))
                 .andExpect(status().is(400))
-                .andExpect(jsonPath("error", is("invalid request param")));
+                .andExpect(jsonPath("error", is("invalid index")));
     }
 }

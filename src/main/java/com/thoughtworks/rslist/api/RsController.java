@@ -43,18 +43,19 @@ public class RsController {
     private ResponseEntity<Events> getOneEvent(@PathVariable int index) {
 
         if (index < 0 || index >= rsList.size())
-            throw new IndexOutOfBoundsException("invalid request param");
+            throw new IndexOutOfBoundsException("invalid index");
         return ResponseEntity.ok().body(rsList.get(index - 1));
 
     }
 
     @GetMapping("/rs/event")
-    private ResponseEntity<List<Events>> getStartUntilEnd(@RequestParam(required = false) Integer start,
-                                                          @RequestParam(required = false) Integer end) {
+    private ResponseEntity<List<Events>> getStartUntilEnd
+            (@RequestParam(required = false) Integer start,
+             @RequestParam(required = false) Integer end) {
         if (start == null || end == null) {
-
             return ResponseEntity.ok().body(rsList);
         }
+
 
         if (start < 0 || end >= rsList.size() || start >= rsList.size()) {
             throw new IndexOutOfBoundsException("invalid request param");

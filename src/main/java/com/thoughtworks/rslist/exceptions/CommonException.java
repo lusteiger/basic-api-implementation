@@ -9,7 +9,8 @@ public class CommonException {
     @ExceptionHandler(IndexOutOfBoundsException.class)
     public ResponseEntity<CommonErr> IndexOutOfBoundsException(Exception e){
         CommonErr commonErr = new CommonErr();
-        commonErr.setError("invalid request param");
+
+        commonErr.setError(e.getMessage());
         return ResponseEntity.badRequest().body(commonErr);
     }
 
