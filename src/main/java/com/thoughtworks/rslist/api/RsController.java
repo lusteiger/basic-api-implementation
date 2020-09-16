@@ -18,17 +18,19 @@ public class RsController {
 
 
 
-    public List<Events> initList() {
-        List<Events> initlist = new ArrayList<>();
-        initlist.add(new Events("第一条事件", "无主题",
+    public List<Events> InitList() {
+        List<Events> initList = new ArrayList<>();
+        initList.add(new Events("第一条事件", "无主题",
                 new User("小钱", 18, "female", "twuc@thoughtworks.com","11234567890")));
-        initlist.add(new Events("第二条事件", "无主题",new User("小李", 30, "male", "twuc@thoughtworks.com","11234567890")));
-        initlist.add(new Events("第三条事件", "无主题",new User("小张", 12, "female", "twuc@thoughtworks.com","11234567890")));
+        initList.add(new Events("第二条事件", "无主题",
+                new User("小李", 30, "male", "twuc@thoughtworks.com","11234567890")));
+        initList.add(new Events("第三条事件", "无主题",
+                new User("小张", 23, "male", "twuc@thoughtworks.com","11234567890")));
 
-        return initlist;
+        return initList;
     }
 
-    private List<Events> rsList = initList();
+    private List<Events> rsList = InitList();
 
     @GetMapping("/rs/list")
     public List<Events> getAllRsEvent() {
@@ -52,7 +54,21 @@ public class RsController {
 
     @PostMapping("/rs/eventAdd")
     private void addEvent(@RequestBody Events events) {
-        rsList.add(events);
+        Boolean register = false;
+        for (int i = 0; i < rsList.size(); i++) {
+            if (events.getUser().equals(rsList.get(i).getUser())){
+                register = true;
+                break;
+            }
+        }
+        if (register){
+            rsList.add(events);
+        }
+        else {
+            rsList.add(events);
+            new UserController().register(events.getUser());
+        }
+
     }
 
     @PutMapping("/rs/eventModify/{index}")
