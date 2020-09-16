@@ -35,11 +35,7 @@ class RsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("event", is("第一条事件")))
                 .andExpect(jsonPath("keywords", is("无主题")))
-                .andExpect(jsonPath("user.userName", is("小钱")))
-                .andExpect(jsonPath("user.age", is(18)))
-                .andExpect(jsonPath("user.gender", is("female")))
-                .andExpect(jsonPath("user.email", is("twuc@thoughtworks.com")))
-                .andExpect(jsonPath("user.phone", is("11234567890")));
+                .andExpect(jsonPath("user").doesNotExist());
     }
 
     @Test
@@ -75,9 +71,12 @@ class RsControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].event", is("第一条事件")))
                 .andExpect(jsonPath("$[0].keywords", is("无主题")))
+                .andExpect(jsonPath("$[0]user").doesNotExist())
                 .andExpect(jsonPath("$[1].event", is("第二条事件")))
                 .andExpect(jsonPath("$[1].keywords", is("无主题")))
+                .andExpect(jsonPath("$[1]user").doesNotExist())
                 .andExpect(jsonPath("$[2].event", is("第三条事件")))
+                .andExpect(jsonPath("$[2]user").doesNotExist())
                 .andExpect(jsonPath("$[2].keywords", is("无主题")));
     }
 

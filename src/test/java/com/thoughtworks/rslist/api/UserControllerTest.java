@@ -262,6 +262,7 @@ class UserControllerTest {
     @Test
     void should_return_list_using_jsonProperty() throws Exception {
 
+
         mockMvc.perform(get("/user/query"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
