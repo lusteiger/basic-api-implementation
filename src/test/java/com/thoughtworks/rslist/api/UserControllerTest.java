@@ -174,5 +174,25 @@ class UserControllerTest {
 
     }
 
+    @Test
+    void should_invalid_when_email_is_not_valid() throws Exception {
 
+        User user = new User("asdasd",18 , "female", "twutw.com", "18812345678");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(user);
+
+        mockMvc.perform(get("/user/query"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].userName", is("小张")))
+                .andExpect(jsonPath("$[0].age", is(23)))
+                .andExpect(jsonPath("$[0].gender", is("male")))
+                .andExpect(jsonPath("$[0].email", is("twuc@thoughtworks.com")))
+                .andExpect(jsonPath("$[0].phone", is("11234567890")));
+        mockMvc.perform(post("/user/register")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
 }
