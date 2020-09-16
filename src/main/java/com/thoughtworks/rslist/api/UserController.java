@@ -17,7 +17,7 @@ public class UserController {
 
     private List<User> init() {
         List<User> initList = new ArrayList<>();
-        User user = new User("小虎", 30,
+        User user = new User("小张", 23,
                 "male", "twuc@thoughtworks.com", "11234567890");
         initList.add(user);
         return initList;
