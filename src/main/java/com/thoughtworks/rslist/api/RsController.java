@@ -2,6 +2,8 @@ package com.thoughtworks.rslist.api;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.thoughtworks.rslist.dto.User;
+import com.thoughtworks.rslist.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,8 @@ import java.util.List;
 @RestController
 public class RsController {
 
+    @Autowired
+    UserService userService;
 
     public List<Events> InitList() {
         List<Events> initList = new ArrayList<>();
@@ -76,7 +80,7 @@ public class RsController {
             }
         }
         if (!register) {
-            new UserController().register(events.getUser());
+            userService.register(events.getUser());
         }
         rsList.add(events);
         return ResponseEntity.status(201).header("index", String.valueOf(rsList.size() - 1)).body(rsList);
