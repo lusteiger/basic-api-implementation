@@ -3,6 +3,7 @@ package com.thoughtworks.rslist.api;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.thoughtworks.rslist.dto.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.rslist.dto.Events;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,14 +59,14 @@ public class RsController {
         }
 
 
-        if (start < 0 || end >= rsList.size() || start >= rsList.size()) {
+        if (start < 1 || end > rsList.size() || start > rsList.size()) {
             throw new IndexOutOfBoundsException("invalid request param");
         }
         return ResponseEntity.ok().body(rsList.subList(start - 1, end));
     }
 
     @PostMapping("/rs/eventAdd")
-    private ResponseEntity<List<Events>> addEvent(@RequestBody Events events) {
+    private ResponseEntity<List<Events>> addEvent (@Valid @RequestBody Events events) {
         Boolean register = false;
 
         for (int i = 0; i < rsList.size(); i++) {

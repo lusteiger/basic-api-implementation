@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @AllArgsConstructor
@@ -19,8 +20,10 @@ public class Events {
     public interface WithoutUser{};
     public interface WithUser extends WithoutUser{};
     @JsonView(Events.WithoutUser.class)
+    @NotEmpty
     private String event;
     @JsonView(Events.WithoutUser.class)
+    @NotEmpty
     private String keywords;
     @Valid
     @JsonView(WithUser.class)
