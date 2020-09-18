@@ -4,6 +4,7 @@ package com.thoughtworks.rslist.api;
 import com.thoughtworks.rslist.dto.User;
 import com.thoughtworks.rslist.entity.UserEntity;
 import com.thoughtworks.rslist.repository.UserRepository;
+import com.thoughtworks.rslist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -18,37 +19,30 @@ import java.util.stream.Collectors;
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @PostMapping("/user/register")
     public ResponseEntity register(@Valid @RequestBody User user) {
 
-        UserEntity userEntity = UserEntity.builder()
-                .userName(user.getUserName())
-                .age(user.getAge())
-                .gender(user.getGender())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .voteNum(user.getVoteNum())
-                .build();
-        userRepository.save(userEntity);
+        userService.register(user);
         return ResponseEntity.created(null).build();
     }
 
     @GetMapping("/user/query")
     public ResponseEntity<List<UserEntity>> QueryAllUser() {
-       return  ResponseEntity.ok( userRepository.findAll());
+       return  ResponseEntity.ok( userService.getUserList()
+               );
     }
 
     @GetMapping("/user/query/{id}")
-    public Optional<UserEntity> QueryUser(@PathVariable int id){
-        return userRepository.findById(id);
+    public ResponseEntity<Optional<UserEntity>> QueryUser(@PathVariable int id){
+        return ResponseEntity.ok().body( userService.getUser(id));
     }
 
 
     @DeleteMapping("/user/delete/{id}")
     public void DeleteUser(@PathVariable int id){
-        userRepository.deleteById(id);
+        userService.deleteById(id);
     }
 
 }

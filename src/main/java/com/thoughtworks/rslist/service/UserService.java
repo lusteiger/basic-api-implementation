@@ -1,21 +1,42 @@
 package com.thoughtworks.rslist.service;
 
 import com.thoughtworks.rslist.dto.User;
+import com.thoughtworks.rslist.entity.UserEntity;
+import com.thoughtworks.rslist.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class UserService {
-    private List<User> userList = new ArrayList<>();
+    @Autowired
+    UserRepository userRepository;
 
-    public void register(User user){
-        userList.add(user);
+
+    public void register(User user) {
+        UserEntity userEntity = UserEntity.builder()
+                .userName(user.getUserName())
+                .age(user.getAge())
+                .gender(user.getGender())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .voteNum(user.getVoteNum())
+                .build();
+        userRepository.save(userEntity);
     }
 
-    public List<User> getUserList(){
-        return userList;
+    public List<UserEntity> getUserList() {
+        return userRepository.findAll();
+    }
+
+    public Optional<UserEntity> getUser(int id) {
+        return userRepository.findById(id);
+    }
+
+    public void deleteById(int id) {
+        userRepository.deleteById(id);
     }
 }
