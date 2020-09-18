@@ -24,6 +24,7 @@ public class UserEntity {
 
     @Column(name = "user")
     private String userName;
+
     private int age;
     private String gender;
     private String email;

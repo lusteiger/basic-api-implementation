@@ -9,33 +9,24 @@ import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Events {
+@Builder
+public class Event {
 
-    public interface WithoutUser{};
-    public interface WithUser extends WithoutUser{};
-    @JsonView(Events.WithoutUser.class)
+
     @NotEmpty
     private String event;
-    @JsonView(Events.WithoutUser.class)
+
     @NotEmpty
     private String keywords;
-    @Valid
-    @JsonView(WithUser.class)
-    private User user;
 
-
-    public String toJsonWith() throws JsonProcessingException{
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writerWithView(WithUser.class)
-                .writeValueAsString(this);
-    }
-
-
+    @NotNull
+    private Integer userId;
 
 }

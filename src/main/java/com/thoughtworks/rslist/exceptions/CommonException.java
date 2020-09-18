@@ -1,6 +1,7 @@
 package com.thoughtworks.rslist.exceptions;
 
 import com.sun.javafx.util.Logging;
+import com.thoughtworks.rslist.api.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import javax.validation.ValidationException;
 
 
 @ControllerAdvice
-public class CommonException {
+public class CommonException extends BaseController {
     @ExceptionHandler({IndexOutOfBoundsException.class,
             MethodArgumentNotValidException.class})
     public ResponseEntity<CommonErr> invalidParamException(Exception e) {
