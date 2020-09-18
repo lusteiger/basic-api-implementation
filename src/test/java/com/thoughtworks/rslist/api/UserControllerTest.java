@@ -39,11 +39,23 @@ class UserControllerTest {
     }
 
 
+    private User getMockUser() {
+        User user = new User("小王", 18, "female",
+                "twu@tw.com", "18812345678");
+        return user;
+    }
+
+    private UserEntity getMockUserEntity() {
+        UserEntity userEntity = new UserEntity(1,"小王", 18, "female",
+                "twu@tw.com", "18812345678",10);
+        return userEntity;
+    }
+
+
     @Test
     void should_register_user() throws Exception {
 
-        User user = new User("小王", 18, "female",
-                "twu@tw.com", "18812345678");
+        User user = getMockUser();
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(user);
 
@@ -67,9 +79,9 @@ class UserControllerTest {
         assertEquals("18812345678",user.getPhone());
         assertEquals(10,user.getVoteNum());
 
-
-
     }
+
+
 
 
     @Test
@@ -282,6 +294,28 @@ class UserControllerTest {
                 .andExpect(jsonPath("$[0].user_email", is("twuc@thoughtworks.com")))
                 .andExpect(jsonPath("$[0].user_phone", is("11234567890")));
 
+
+    }
+
+    @Test
+    void should_return_user_entity_when_query_with_index() throws Exception {
+        User user = getMockUser();
+        UserEntity userEntity =getMockUserEntity();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(user);
+        mockMvc.perform(post("/user/register")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+        mockMvc.perform(get("/user/query/1"))
+                .andExpect(status().isOk());
+        assertEquals(1,userEntity.getId());
+        assertEquals("小王",userEntity.getUserName());
+        assertEquals(18,userEntity.getAge());
+        assertEquals("female",userEntity.getGender());
+        assertEquals("twu@tw.com",userEntity.getEmail());
+        assertEquals("18812345678",userEntity.getPhone());
+        assertEquals(10,userEntity.getVoteNum());
 
     }
 
