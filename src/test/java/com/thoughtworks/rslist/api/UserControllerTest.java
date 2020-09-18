@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.rslist.dto.User;
 import com.thoughtworks.rslist.entity.UserEntity;
 import com.thoughtworks.rslist.repository.UserRepository;
+import org.assertj.core.condition.DoesNotHave;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +15,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import java.util.List;
+
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -316,6 +318,30 @@ class UserControllerTest {
         assertEquals("twu@tw.com",userEntity.getEmail());
         assertEquals("18812345678",userEntity.getPhone());
         assertEquals(10,userEntity.getVoteNum());
+
+    }
+
+    @Test
+    void should_not_return_when_delete_with_index() throws Exception {
+        User user = getMockUser();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(user);
+        mockMvc.perform(post("/user/register")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+        mockMvc.perform(get("/user/query"))
+                .andExpect(status().isOk())
+        .andExpect(jsonPath("$",hasSize(1)));
+
+        mockMvc.perform((delete("/user/delete/1")))
+                .andExpect(status().isOk());
+        mockMvc.perform((get("/user/query")))
+                .andExpect(jsonPath("$",hasSize(0)))
+                .andExpect(status().isOk());
+
+
 
     }
 
