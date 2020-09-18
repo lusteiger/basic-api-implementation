@@ -118,7 +118,7 @@ class RsControllerTest {
 
 
         User user = new User("小张", 23, "male",
-                "twuc@thoughtworks.com", "11234567890");
+                "twuc@thoughtworks.com", "11234567890",10);
         Events events = new Events("添加一条热搜", "娱乐", user);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(events);
@@ -199,7 +199,7 @@ class RsControllerTest {
 
 
         User user = new User("老李", 80, "male",
-                "twuc@thoughtworks.com", "11234567890");
+                "twuc@thoughtworks.com", "11234567890",10);
         Events events = new Events("添加一条热搜", "娱乐", user);
         ObjectMapper objectMapper = new ObjectMapper();
         String EventJson = objectMapper.writeValueAsString(events);
@@ -275,7 +275,7 @@ class RsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)));
 
-        User user = new User("xiaowang", 19, "female", "a@thoughtworks.com", "18888888888");
+        User user = new User("xiaowang", 19, "female", "a@thoughtworks.com", "18888888888",10);
         Events events = new Events("添加一条热搜", "娱乐", user);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(events);

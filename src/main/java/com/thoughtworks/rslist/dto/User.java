@@ -8,8 +8,7 @@ import javax.validation.constraints.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
+@Builder
 public class User {
     @NotEmpty
     @Size(max = 8)
@@ -29,4 +28,14 @@ public class User {
     @JsonProperty("user_phone")
     @Pattern(regexp = "^1\\d{10}$")
     private String phone;
+    @JsonProperty("user_voteNum")
+    private int voteNum = 10;
+
+    public User(@NotEmpty @Size(max = 8) String userName, @Max(100) @Min(18) @NotNull int age, @NotEmpty String gender, @Email String email, @Pattern(regexp = "^1\\d{10}$") String phone) {
+        this.userName = userName;
+        this.age = age;
+        this.gender = gender;
+        this.email = email;
+        this.phone = phone;
+    }
 }

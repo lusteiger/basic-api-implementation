@@ -34,7 +34,7 @@ class CommonExceptionTest {
     @Test
     void should_return_exception_user_of_event() throws Exception {
         User user = new User("小张", 200, "male",
-                "twuc@thoughtworks.com", "11234567890");
+                "twuc@thoughtworks.com", "11234567890",10);
         Events events = new Events("添加一条热搜", "娱乐", user);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(events);
@@ -47,7 +47,7 @@ class CommonExceptionTest {
     @Test
     void should_return_exception_event() throws Exception {
         User user = new User("小张", 22, "male",
-                "twuc@thoughtworks.com", "11234567890");
+                "twuc@thoughtworks.com", "11234567890",10);
         Events events = new Events("", "娱乐", user);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(events);
@@ -60,7 +60,7 @@ class CommonExceptionTest {
     @Test
     void should_return_exception_user() throws Exception {
         User user = new User("小张", 22, "male",
-                "ghtworks.com", "11234567890");
+                "ghtworks.com", "11234567890",10);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(user);
