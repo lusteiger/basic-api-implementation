@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thoughtworks.rslist.entity.EventEntity;
+import com.thoughtworks.rslist.entity.UserEntity;
 import lombok.*;
 
 import javax.validation.Valid;
@@ -19,7 +21,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class Event {
 
-
+    private int id;
     @NotEmpty
     private String event;
 
@@ -29,4 +31,12 @@ public class Event {
     @NotNull
     private Integer userId;
 
+    public static Event from(EventEntity eventEntity) {
+        return Event.builder()
+                .id(eventEntity.getId())
+                .event(eventEntity.getEvent())
+                .keywords(eventEntity.getKeywords())
+                .userId(eventEntity.getUser().getId())
+                .build();
+    }
 }

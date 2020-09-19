@@ -1,6 +1,7 @@
 package com.thoughtworks.rslist.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.thoughtworks.rslist.entity.UserEntity;
 import lombok.*;
 
 import javax.validation.constraints.*;
@@ -10,6 +11,8 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @Builder
 public class User {
+    @JsonProperty("user_id")
+    private int  id;
     @NotEmpty
     @Size(max = 8)
     @JsonProperty("user_name")
@@ -37,5 +40,19 @@ public class User {
         this.gender = gender;
         this.email = email;
         this.phone = phone;
+    }
+
+
+
+
+    public static User from(UserEntity userEntity) {
+        return User.builder()
+                .id(userEntity.getId())
+                .userName(userEntity.getUserName())
+                .gender(userEntity.getGender())
+                .email(userEntity.getEmail())
+                .phone(userEntity.getPhone())
+                .age(userEntity.getAge())
+                .build();
     }
 }

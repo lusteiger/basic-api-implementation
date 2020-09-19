@@ -1,6 +1,7 @@
 package com.thoughtworks.rslist.api;
 
 import com.thoughtworks.rslist.entity.EventEntity;
+import com.thoughtworks.rslist.entity.UserEntity;
 import com.thoughtworks.rslist.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.thoughtworks.rslist.dto.Event;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -35,7 +35,7 @@ public class RsController {
 //    }
 //
     @GetMapping("/rs/event")
-    private ResponseEntity<List<EventEntity>> getStartUntilEnd
+    private ResponseEntity<List<Event>> getStartUntilEnd
             (@RequestParam(required = false) Integer start,
              @RequestParam(required = false) Integer end) {
 
@@ -68,19 +68,24 @@ public class RsController {
 //        return responseEntity;
 //    }
 
-//    @PutMapping("/rs/eventModify/{index}")
-//    private ResponseEntity<List<Event>> ModifyEvent(@RequestBody String events, @PathVariable int index) throws JsonProcessingException {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        Event modifyEvent = objectMapper.readValue(events, Event.class);
-//        if (modifyEvent.getEvent() == null) {
-//            modifyEvent.setEvent(rsList.get(index - 1).getEvent());
-//        }
-//        if (modifyEvent.getKeywords() == null) {
-//            modifyEvent.setKeywords(rsList.get(index - 1).getKeywords());
-//        }
-//        rsList.set(index - 1, modifyEvent);
-//        return ResponseEntity.ok().body(rsList);
-//    }
+    @PostMapping("/rs/{rsEventId}")
+    private ResponseEntity ModifyEvent(@RequestBody Event events, @PathVariable int rsEventId)  {
+
+
+
+        EventEntity eventEntity = EventEntity.builder()
+                .id(rsEventId)
+                .event(events.getEvent())
+                .keywords(events.getKeywords())
+                .user(UserEntity.builder()
+                        .id(events.getUserId())
+                        .build())
+                .build();
+
+        ResponseEntity responseEntity =  eventService.UpdateEventById(eventEntity,rsEventId);
+
+      return   responseEntity;
+    }
 //
 //    @DeleteMapping("/rs/eventDelete/{index}")
 //    private ResponseEntity<List<Event>> DeleteEvent(@PathVariable int index) {

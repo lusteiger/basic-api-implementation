@@ -2,7 +2,6 @@ package com.thoughtworks.rslist.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.rslist.dto.Event;
-import com.thoughtworks.rslist.dto.User;
 import com.thoughtworks.rslist.entity.EventEntity;
 import com.thoughtworks.rslist.entity.UserEntity;
 import com.thoughtworks.rslist.repository.EventRepository;
@@ -40,13 +39,12 @@ class RsControllerTest {
 
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         eventRepository.deleteAll();
         userRepository.deleteAll();
-        userRepository.save(getMockUserEntity());
     }
 
-    public UserEntity getMockUserEntity(){
+    public UserEntity getMockUserEntity() {
         UserEntity userEntity = UserEntity.builder()
 
                 .userName("小王")
@@ -59,7 +57,7 @@ class RsControllerTest {
         return userEntity;
     }
 
-    public EventEntity getMocEventEntity(){
+    public EventEntity getMocEventEntity() {
         EventEntity eventEntity = EventEntity.builder()
                 .event("添加一条热搜")
                 .keywords("娱乐")
@@ -67,9 +65,6 @@ class RsControllerTest {
                 .build();
         return eventEntity;
     }
-
-
-
 
 
 //    @Test
@@ -319,7 +314,7 @@ class RsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
-        Event events = new Event("添加一条热搜", "娱乐", 1);
+        Event events = new Event(1,"添加一条热搜", "娱乐", 1);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(events);
         mockMvc.perform(post("/rs/eventAdd").content(json)
@@ -340,18 +335,14 @@ class RsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
-        Event events = new Event("添加一条热搜", "娱乐", 2);
+        Event events = new Event(1,"添加一条热搜", "娱乐", 2);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(events);
         mockMvc.perform(post("/rs/eventAdd").content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
 
-
-
     }
-
-
 
 
 //    @Test
@@ -435,5 +426,146 @@ class RsControllerTest {
 //
 //    }
 
+    @Test
+    void update_event_has_associate_user() throws Exception {
+        UserEntity userEntity = UserEntity.builder()
+                .userName("小王")
+                .age(18)
+                .gender("female")
+                .email("twu@tw.com")
+                .phone("18812345678")
+                .voteNum(10)
+                .build();
 
+        userEntity = userRepository.save(userEntity);
+
+        EventEntity eventEntity = EventEntity.builder()
+                .event("哈哈")
+                .keywords("娱乐")
+                .user(userEntity)
+                .build();
+
+        eventEntity = eventRepository.save(eventEntity);
+
+        Event updateEvent = Event.builder()
+                .event("芯片")
+                .keywords("科技")
+                .userId(userEntity.getId())
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(updateEvent);
+        mockMvc.perform(get("/user/query"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+        mockMvc.perform(get("/rs/event"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+        mockMvc.perform(post("/rs/" + eventEntity.getId()).content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        mockMvc.perform((get("/rs/event")))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("[0].id", is(eventEntity.getId())))
+                .andExpect(jsonPath("[0].event", is("芯片")))
+                .andExpect(jsonPath("[0].keywords", is("科技")))
+                .andExpect(jsonPath("[0].userId", is(eventEntity.getUser().getId())))
+                .andExpect(status().isOk());
+
+
+    }
+
+    @Test
+    void update_event_only_event_name() throws Exception {
+        UserEntity userEntity = UserEntity.builder()
+                .userName("小王")
+                .age(18)
+                .gender("female")
+                .email("twu@tw.com")
+                .phone("18812345678")
+                .voteNum(10)
+                .build();
+
+        userEntity = userRepository.save(userEntity);
+
+        EventEntity eventEntity = EventEntity.builder()
+                .event("哈哈")
+                .keywords("娱乐")
+                .user(userEntity)
+                .build();
+
+        eventEntity = eventRepository.save(eventEntity);
+
+        Event updateEvent = Event.builder()
+                .event("芯片")
+                .keywords("娱乐")
+                .userId(userEntity.getId())
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(updateEvent);
+        mockMvc.perform(get("/user/query"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+        mockMvc.perform(get("/rs/event"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+        mockMvc.perform(post("/rs/" + eventEntity.getId()).content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        mockMvc.perform((get("/rs/event")))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("[0].id", is(eventEntity.getId())))
+                .andExpect(jsonPath("[0].event", is("芯片")))
+                .andExpect(jsonPath("[0].keywords", is("娱乐")))
+                .andExpect(jsonPath("[0].userId", is(eventEntity.getUser().getId())))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void update_event_only_keywords() throws Exception {
+        UserEntity userEntity = UserEntity.builder()
+                .userName("小王")
+                .age(18)
+                .gender("female")
+                .email("twu@tw.com")
+                .phone("18812345678")
+                .voteNum(10)
+                .build();
+
+        userEntity = userRepository.save(userEntity);
+
+        EventEntity eventEntity = EventEntity.builder()
+                .event("哈哈")
+                .keywords("娱乐")
+                .user(userEntity)
+                .build();
+
+        eventEntity = eventRepository.save(eventEntity);
+
+        Event updateEvent = Event.builder()
+                .event("哈哈")
+                .keywords("哈哈")
+                .userId(userEntity.getId())
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(updateEvent);
+        mockMvc.perform(get("/user/query"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+        mockMvc.perform(get("/rs/event"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+        mockMvc.perform(post("/rs/" + eventEntity.getId()).content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        mockMvc.perform((get("/rs/event")))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("[0].id", is(eventEntity.getId())))
+                .andExpect(jsonPath("[0].event", is("哈哈")))
+                .andExpect(jsonPath("[0].keywords", is("哈哈")))
+                .andExpect(jsonPath("[0].userId", is(eventEntity.getUser().getId())))
+                .andExpect(status().isOk());
+    }
 }

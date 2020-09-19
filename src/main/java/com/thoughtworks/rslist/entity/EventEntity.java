@@ -25,8 +25,7 @@ public class EventEntity {
 
     private String keywords;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 }

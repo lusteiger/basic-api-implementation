@@ -7,8 +7,11 @@ import com.thoughtworks.rslist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -32,8 +35,11 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
-    public List<UserEntity> getUserList() {
-        return userRepository.findAll();
+    public List<User> getUserList() {
+
+       List<User>  userList =  userRepository.findAll().stream().map(User::from).collect(Collectors.toList());
+
+        return userList;
     }
 
     public Optional<UserEntity> getUser(int id) {

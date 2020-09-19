@@ -1,16 +1,16 @@
 package com.thoughtworks.rslist.service;
 
+import com.thoughtworks.rslist.dto.Event;
 import com.thoughtworks.rslist.entity.EventEntity;
-import com.thoughtworks.rslist.exceptions.NotFoundUserException;
 import com.thoughtworks.rslist.repository.EventRepository;
 import com.thoughtworks.rslist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -19,17 +19,18 @@ public class EventService {
     @Autowired
     UserRepository userRepository;
 
-    public List<EventEntity> findAllEvent() {
-        return eventRepository.findAll();
+    public List<Event> findAllEvent() {
+        return eventRepository.findAll().stream().map(Event::from).collect(Collectors.toList());
     }
 
-    public List<EventEntity> findEventBetweenStartAndEnd(int start, int end) {
-        return eventRepository.findByIdBetween(start, end);
+    public List<Event> findEventBetweenStartAndEnd(int start, int end) {
+        return eventRepository.findByIdBetween(start, end).stream()
+                .map(Event::from).collect(Collectors.toList());
     }
 
     public ResponseEntity AddEvent(EventEntity eventEntity) {
 
-        int id = eventEntity.getUserId();
+        int id = eventEntity.getUser().getId();
         if (userRepository.findById(id).equals(Optional.empty()))
             return ResponseEntity.status(400).body("the user dose not register!");
 
@@ -40,6 +41,26 @@ public class EventService {
     public int findSize() {
         List<EventEntity> entityList = eventRepository.findAll();
         return entityList.size();
+    }
+
+    public ResponseEntity UpdateEventById(EventEntity eventEntity, int id) {
+
+        if (!userRepository.findById(eventEntity.getUser().getId()).isPresent())
+            return ResponseEntity.status(400).build();
+
+        Optional<EventEntity> entityOptional = eventRepository.findById(id);
+        if (!entityOptional.isPresent())
+            throw new RuntimeException();
+
+        EventEntity record = entityOptional.get();
+        if (!eventEntity.getEvent().isEmpty())
+            record.setEvent(eventEntity.getEvent());
+        if (!eventEntity.getKeywords().isEmpty())
+            record.setKeywords(eventEntity.getKeywords());
+
+        record.setUser(eventEntity.getUser());
+        eventRepository.save(record);
+        return ResponseEntity.ok().build();
     }
 
 

@@ -2,10 +2,7 @@ package com.thoughtworks.rslist.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.org.glassfish.gmbal.NameValue;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -33,6 +30,6 @@ public class UserEntity {
     private int voteNum;
 
 
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "userId")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
     private List<EventEntity> eventEntities;
 }
