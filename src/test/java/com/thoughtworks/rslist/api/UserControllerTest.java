@@ -2,7 +2,9 @@ package com.thoughtworks.rslist.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.rslist.dto.User;
+import com.thoughtworks.rslist.entity.EventEntity;
 import com.thoughtworks.rslist.entity.UserEntity;
+import com.thoughtworks.rslist.repository.EventRepository;
 import com.thoughtworks.rslist.repository.UserRepository;
 import org.assertj.core.condition.DoesNotHave;
 import org.hamcrest.core.IsNull;
@@ -34,10 +36,15 @@ class UserControllerTest {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    EventRepository eventRepository;
+
     @BeforeEach
     void setUp() {
         ObjectMapper objectMapper = new ObjectMapper();
         userRepository.deleteAll();
+        userRepository.deleteAll();
+//        eventRepository.save(getMockeventEntity());
     }
 
 
@@ -47,11 +54,20 @@ class UserControllerTest {
         return user;
     }
 
-    private UserEntity getMockUserEntity() {
-        UserEntity userEntity = new UserEntity(1, "小王", 18, "female",
-                "twu@tw.com", "18812345678", 10);
-        return userEntity;
-    }
+//    private UserEntity getMockUserEntity() {
+//        UserEntity userEntity = new UserEntity(1, "小王", 18, "female",
+//                "twu@tw.com", "18812345678", 10);
+//        return userEntity;
+//    }
+
+//    private EventEntity getMockeventEntity(){
+//        EventEntity eventEntity = EventEntity.builder()
+//                .event("哈哈")
+//                .keywords("娱乐")
+//                .userId(1)
+//                .build();
+//        return eventEntity;
+//    }
 
 
     @Test
@@ -247,45 +263,63 @@ class UserControllerTest {
 
     }
 
-    @Test
-    void should_return_user_entity_when_query_with_index() throws Exception {
-        User user = getMockUser();
-        UserEntity userEntity = getMockUserEntity();
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(user);
-        mockMvc.perform(post("/user/register")
-                .content(json)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
-        mockMvc.perform(get("/user/query/1"))
-                .andExpect(status().isOk());
-        assertEquals(1, userEntity.getId());
-        assertEquals("小王", userEntity.getUserName());
-        assertEquals(18, userEntity.getAge());
-        assertEquals("female", userEntity.getGender());
-        assertEquals("twu@tw.com", userEntity.getEmail());
-        assertEquals("18812345678", userEntity.getPhone());
-        assertEquals(10, userEntity.getVoteNum());
+//    @Test
+//    void should_return_user_entity_when_query_with_index() throws Exception {
+//        User user = getMockUser();
+//        UserEntity userEntity = getMockUserEntity();
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        String json = objectMapper.writeValueAsString(user);
+//        mockMvc.perform(post("/user/register")
+//                .content(json)
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isCreated());
+//        mockMvc.perform(get("/user/query/1"))
+//                .andExpect(status().isOk());
+//        assertEquals(1, userEntity.getId());
+//        assertEquals("小王", userEntity.getUserName());
+//        assertEquals(18, userEntity.getAge());
+//        assertEquals("female", userEntity.getGender());
+//        assertEquals("twu@tw.com", userEntity.getEmail());
+//        assertEquals("18812345678", userEntity.getPhone());
+//        assertEquals(10, userEntity.getVoteNum());
 
-    }
+//    }
 
     @Test
     void should_not_return_when_delete_with_index() throws Exception {
-        User user = getMockUser();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(user);
-        mockMvc.perform(post("/user/register")
-                .content(json)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+        UserEntity userEntity =UserEntity.builder()
+                .userName("小王")
+                .age(18)
+                .gender("female")
+                .email("twu@tw.com")
+                .phone("18812345678")
+                .voteNum(10)
+                .build();
+        EventEntity eventEntity1 = EventEntity.builder()
+                .event("哈哈")
+                .keywords("娱乐")
+                .userId(1)
+                .build();
+        EventEntity eventEntity2 = EventEntity.builder()
+                .event("ss")
+                .keywords("娱乐")
+                .userId(1)
+                .build();
+        userRepository.save(userEntity);
+        eventRepository.save(eventEntity1);
+        eventRepository.save(eventEntity2);
         mockMvc.perform(get("/user/query"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
-
+        mockMvc.perform(get("/rs/event"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
         mockMvc.perform((delete("/user/delete/1")))
                 .andExpect(status().isOk());
         mockMvc.perform((get("/user/query")))
+                .andExpect(jsonPath("$", hasSize(0)))
+                .andExpect(status().isOk());
+        mockMvc.perform((get("/rs/event")))
                 .andExpect(jsonPath("$", hasSize(0)))
                 .andExpect(status().isOk());
 

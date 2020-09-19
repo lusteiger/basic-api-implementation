@@ -55,18 +55,18 @@ public class RsController {
 
     }
 
-    @PostMapping("/rs/eventAdd")
-    private ResponseEntity addEvent (@Valid @RequestBody Event event) {
-        EventEntity eventEntity = EventEntity.builder()
-                .event(event.getEvent())
-                .keywords(event.getKeywords())
-                .userId(event.getUserId())
-                .build();
-
-        ResponseEntity responseEntity=eventService.AddEvent(eventEntity);
-
-        return responseEntity;
-    }
+//    @PostMapping("/rs/eventAdd")
+//    private ResponseEntity addEvent (@Valid @RequestBody Event event) {
+//        EventEntity eventEntity = EventEntity.builder()
+//                .event(event.getEvent())
+//                .keywords(event.getKeywords())
+//                .userId(event.getUserId())
+//                .build();
+//
+//        ResponseEntity responseEntity=eventService.AddEvent(eventEntity);
+//
+//        return responseEntity;
+//    }
 
 //    @PutMapping("/rs/eventModify/{index}")
 //    private ResponseEntity<List<Event>> ModifyEvent(@RequestBody String events, @PathVariable int index) throws JsonProcessingException {
