@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.rslist.dto.Vote;
 import com.thoughtworks.rslist.entity.EventEntity;
 import com.thoughtworks.rslist.entity.UserEntity;
+import com.thoughtworks.rslist.entity.VoteEntity;
 import com.thoughtworks.rslist.repository.EventRepository;
 import com.thoughtworks.rslist.repository.UserRepository;
 import com.thoughtworks.rslist.repository.VoteRepository;
@@ -143,5 +144,50 @@ class VoteControllerTest {
 
     }
 
+    @Test
+    void should_return_all_vote_record_between_start_and_end() throws Exception {
+        UserEntity userEntity = UserEntity.builder()
+                .userName("小王")
+                .age(18)
+                .gender("female")
+                .email("twu@tw.com")
+                .phone("18812345678")
+                .voteNum(10)
+                .build();
+
+        userRepository.save(userEntity);
+
+        EventEntity eventEntity = EventEntity.builder()
+                .event("哈哈")
+                .keywords("娱乐")
+                .user(userEntity)
+                .build();
+        eventRepository.save(eventEntity);
+        VoteEntity vote1 = VoteEntity.builder()
+                .voteNum(1)
+                .userId(1)
+                .voteTime(LocalTime.now())
+                .build();
+        VoteEntity vote2 = VoteEntity.builder()
+                .voteNum(2)
+                .userId(1)
+                .voteTime(LocalTime.now())
+                .build();
+        VoteEntity vote3 = VoteEntity.builder()
+                .voteNum(3)
+                .userId(1)
+                .voteTime(LocalTime.now())
+                .build();
+        voteRepository.save(vote1);
+        voteRepository.save(vote2);
+        voteRepository.save(vote3);
+
+        mockMvc.perform(post("/rs/vote/range/?start=00:00:00&end=23:59:59"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$",hasSize(3)))
+                .andExpect(jsonPath("[0].voteNum",is(1)))
+                .andExpect(jsonPath("[1].voteNum",is(2)))
+                .andExpect(jsonPath("[2].voteNum",is(3)));
+    }
 
 }

@@ -43,7 +43,7 @@ public class RsController {
         }
 
         int size = eventService.findSize();
-        if (start < 0 || end > size || start > size) {
+        if (start < 0 || end > size+1 || start > size+1) {
             throw new IndexOutOfBoundsException("invalid request param");
         }
 

@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class VoteController {
@@ -32,12 +35,30 @@ public class VoteController {
 
     }
 
-    @GetMapping("/rs/vote/list")
-    public ResponseEntity<List<Vote>> VoteList() {
+    @PostMapping("/rs/vote/range/")
+    public ResponseEntity<List<Vote>> VoteRangeList(@RequestParam(required = false) String start,
+                                                    @RequestParam(required = false) String end) {
 
-        List<Vote> voteList = voteService.voteList();
+
+        if (start.isEmpty() || end.isEmpty())
+            return voteService.voteList();
+
+        LocalTime startTime = LocalTime.parse(start, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        LocalTime endTime = LocalTime.parse(end, DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+        List<Vote> voteList = voteService.QueryVoteNumRange(startTime, endTime).stream()
+                .map(Vote::from).collect(Collectors.toList());
 
         return ResponseEntity.ok().body(voteList);
 
     }
+
+    @GetMapping("/rs/vote/list")
+    public ResponseEntity<List<Vote>> VoteList() {
+
+
+        return voteService.voteList();
+    }
+
+
 }

@@ -102,19 +102,54 @@ class RsControllerTest {
                 .andExpect(jsonPath("keywords", is("娱乐")));
 
     }
-//
-//    @Test
-//    void should_get_start_until_end_rs_event() throws Exception {
-//        mockMvc.perform(get("/rs/event?start=1&end=3"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(3)))
-//                .andExpect(jsonPath("$[0].event", is("第一条事件")))
-//                .andExpect(jsonPath("$[0].keywords", is("无主题")))
-//                .andExpect(jsonPath("$[1].event", is("第二条事件")))
-//                .andExpect(jsonPath("$[1].keywords", is("无主题")))
-//                .andExpect(jsonPath("$[2].event", is("第三条事件")))
-//                .andExpect(jsonPath("$[2].keywords", is("无主题")));
 
+    @Test
+    void should_get_start_until_end_rs_event() throws Exception {
+
+        UserEntity userEntity = UserEntity.builder()
+                .id(1)
+                .userName("小王")
+                .age(18)
+                .gender("female")
+                .email("twu@tw.com")
+                .phone("18812345678")
+                .voteNum(10)
+                .build();
+
+        User user = User.builder()
+                .userName("小王")
+                .age(18)
+                .gender("female")
+                .email("twu@tw.com")
+                .phone("18812345678")
+                .voteNum(10)
+                .build();
+
+        userRepository.save(userEntity);
+        EventEntity event1 = EventEntity.builder()
+
+                .event("哈哈3")
+                .keywords("娱乐3")
+                .user(userEntity)
+                .build();
+
+        EventEntity event2 = EventEntity.builder()
+                .id(2)
+                .event("哈哈2")
+                .keywords("娱乐2")
+                .user(userEntity)
+                .build();
+
+        eventRepository.save(event2);
+        eventRepository.save(event1);
+        mockMvc.perform(get("/rs/event"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+        mockMvc.perform(get("/rs/event?start=2&end=3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+
+    }
 
     @Test
     void should_add_rs_event_has_user() throws Exception {

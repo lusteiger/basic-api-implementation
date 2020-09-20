@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,10 +28,10 @@ public class VoteService {
     @Autowired
     EventRepository eventRepository;
 
-    public List<Vote> voteList(){
+    public ResponseEntity<List<Vote>> voteList(){
         List<Vote> voteList = voteRepository.findAll().stream().map(Vote::from).collect(Collectors.toList());
 
-        return voteList;
+        return ResponseEntity.ok().body(voteList);
     }
 
 
@@ -64,6 +65,12 @@ public class VoteService {
                 .voteTime(vote.getVoteTime())
                 .build();
         return ResponseEntity.ok().body(result);
+    }
+
+    public List<VoteEntity> QueryVoteNumRange(LocalTime start, LocalTime end){
+       List<VoteEntity> voteEntityList = voteRepository.findAllByVoteTimeBetween(start, end);
+
+       return voteEntityList;
     }
 
 }
