@@ -12,6 +12,7 @@ public interface EventRepository extends CrudRepository<EventEntity,Integer>{
     List<EventEntity> findAll();
     List<EventEntity> findByIdBetween(int start , int end);
     void deleteAllByUserId(int userid);
+    void deleteById(int id);
 
 
 

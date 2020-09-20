@@ -16,8 +16,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 @Builder
 public class Event {
 
@@ -31,12 +29,17 @@ public class Event {
     @NotNull
     private Integer userId;
 
+    private User user;
+
+    private int voteNum;
+
     public static Event from(EventEntity eventEntity) {
         return Event.builder()
                 .id(eventEntity.getId())
                 .event(eventEntity.getEvent())
                 .keywords(eventEntity.getKeywords())
                 .userId(eventEntity.getUser().getId())
+                .voteNum(eventEntity.getVoteNum())
                 .build();
     }
 }

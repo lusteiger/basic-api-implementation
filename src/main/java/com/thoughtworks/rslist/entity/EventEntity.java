@@ -25,6 +25,10 @@ public class EventEntity {
 
     private String keywords;
 
+    private int voteNum;
+
+
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;

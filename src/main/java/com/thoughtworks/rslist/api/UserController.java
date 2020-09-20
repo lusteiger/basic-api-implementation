@@ -30,17 +30,6 @@ public class UserController {
     public ResponseEntity<List<User>> QueryAllUser() {
 
         List<User> userList = userService.getUserList();
-//        List<User> userList = new ArrayList<>();
-//        for (int i = 0; i < userEntityList.size(); i++) {
-//            userList.get(i).setUserName(userEntityList.get(i).getUserName());
-//            userList.get(i).setAge(userEntityList.get(i).getAge());
-//            userList.get(i).setGender(userEntityList.get(i).getGender());
-//            userList.get(i).setEmail(userEntityList.get(i).getEmail());
-//            userList.get(i).setPhone(userEntityList.get(i).getPhone());
-//            userList.get(i).setVoteNum(userEntityList.get(i).getVoteNum());
-//        }
-
-
 
 
        return  ResponseEntity.ok( userList);
