@@ -96,7 +96,7 @@ class RsControllerTest {
                 .andExpect(jsonPath("$[0].keywords", is("娱乐")));
 
 
-        mockMvc.perform(get("/rs/query/2"))
+        mockMvc.perform(get("/rs/query/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("event", is("哈哈")))
                 .andExpect(jsonPath("keywords", is("娱乐")));
@@ -145,7 +145,7 @@ class RsControllerTest {
         mockMvc.perform(get("/rs/event"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
-        mockMvc.perform(get("/rs/event?start=2&end=3"))
+        mockMvc.perform(get("/rs/event?start=1&end=2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 

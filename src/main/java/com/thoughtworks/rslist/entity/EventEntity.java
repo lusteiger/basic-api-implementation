@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 public class EventEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String event;
 
