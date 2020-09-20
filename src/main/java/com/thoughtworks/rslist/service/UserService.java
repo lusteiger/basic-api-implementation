@@ -5,6 +5,7 @@ import com.thoughtworks.rslist.entity.UserEntity;
 import com.thoughtworks.rslist.repository.EventRepository;
 import com.thoughtworks.rslist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,7 +15,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-@Service
+
+@Component
 public class UserService {
     @Autowired
     UserRepository userRepository;

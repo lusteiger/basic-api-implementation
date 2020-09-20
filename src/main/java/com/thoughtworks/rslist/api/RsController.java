@@ -6,6 +6,7 @@ import com.thoughtworks.rslist.entity.UserEntity;
 import com.thoughtworks.rslist.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import com.thoughtworks.rslist.dto.Event;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@Controller
+@ResponseBody
 public class RsController {
 
     @Autowired

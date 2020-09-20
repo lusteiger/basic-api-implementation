@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.rslist.entity.EventEntity;
 import com.thoughtworks.rslist.entity.UserEntity;
 import lombok.*;
+import org.springframework.context.annotation.Bean;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;

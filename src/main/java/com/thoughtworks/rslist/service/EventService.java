@@ -6,28 +6,37 @@ import com.thoughtworks.rslist.repository.EventRepository;
 import com.thoughtworks.rslist.repository.UserRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
+@Component
+
+
 public class EventService {
     @Autowired
     EventRepository eventRepository;
     @Autowired
     UserRepository userRepository;
 
+
     public List<Event> findAllEvent() {
         return eventRepository.findAll().stream().map(Event::from).collect(Collectors.toList());
     }
+
 
     public List<Event> findEventBetweenStartAndEnd(int start, int end) {
         return eventRepository.findByIdBetween(start, end).stream()
                 .map(Event::from).collect(Collectors.toList());
     }
+
 
     public ResponseEntity AddEvent(EventEntity eventEntity) {
 
@@ -40,10 +49,12 @@ public class EventService {
         return ResponseEntity.ok().build();
     }
 
+
     public int findSize() {
         List<EventEntity> entityList = eventRepository.findAll();
         return entityList.size();
     }
+
 
     public ResponseEntity UpdateEventById(EventEntity eventEntity, int id) {
 
@@ -68,7 +79,7 @@ public class EventService {
 
     public Event findById(int id) {
         Optional<EventEntity> eventEntity = eventRepository.findById(id);
-        if (!eventEntity.isPresent()){
+        if (!eventEntity.isPresent()) {
             throw new RuntimeException();
         }
         EventEntity event = eventEntity.get();
@@ -82,7 +93,8 @@ public class EventService {
         return result;
     }
 
-    public ResponseEntity DeleteEventById (int id){
+
+    public ResponseEntity DeleteEventById(int id) {
         eventRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
