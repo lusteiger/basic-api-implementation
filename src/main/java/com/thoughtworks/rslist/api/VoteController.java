@@ -28,7 +28,7 @@ public class VoteController {
 
         ResponseEntity responseEntity = voteService.saveVote(voteEntity, rsEventId);
 
-        return ResponseEntity.ok().body(responseEntity);
+        return responseEntity;
 
     }
 
