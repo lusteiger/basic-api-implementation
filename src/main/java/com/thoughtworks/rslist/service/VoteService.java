@@ -49,7 +49,7 @@ public class VoteService {
             event.setVoteNum(event.getVoteNum()+voteEntity.getVoteNum());
         }
         else
-            throw new RuntimeException();
+            return ResponseEntity.status(400).build();
 
 
 

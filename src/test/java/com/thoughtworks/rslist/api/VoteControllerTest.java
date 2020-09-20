@@ -97,4 +97,49 @@ class VoteControllerTest {
 
     }
 
+    @Test
+    void should_valid_vote_number_more_than_users() throws Exception {
+        UserEntity userEntity = UserEntity.builder()
+                .userName("小王")
+                .age(18)
+                .gender("female")
+                .email("twu@tw.com")
+                .phone("18812345678")
+                .voteNum(10)
+                .build();
+
+        userRepository.save(userEntity);
+
+        EventEntity eventEntity = EventEntity.builder()
+                .event("哈哈")
+                .keywords("娱乐")
+                .user(userEntity)
+                .build();
+        eventRepository.save(eventEntity);
+        Vote vote = Vote.builder()
+                .voteNum(10)
+                .userId(1)
+                .voteTime(LocalTime.now())
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String json = objectMapper.writeValueAsString(vote);
+
+
+        mockMvc.perform(get("/user/query"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+
+        mockMvc.perform(get("/rs/event"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+        mockMvc.perform(post("/rs/vote/{rsEventId}", eventEntity.getId())
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+
 }
