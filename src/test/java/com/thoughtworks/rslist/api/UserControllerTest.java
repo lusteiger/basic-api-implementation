@@ -280,7 +280,7 @@ class UserControllerTest {
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
-        mockMvc.perform(get("/user/query/1"))
+        mockMvc.perform(get("/user/1/query"))
                 .andExpect(status().isOk());
         assertEquals(1, userEntity.getId());
         assertEquals("小王", userEntity.getUserName());
@@ -318,15 +318,15 @@ class UserControllerTest {
         mockMvc.perform(get("/user/query"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
-        mockMvc.perform((delete("/user/delete/1")))
+        mockMvc.perform((delete("/user/1/delete")))
                 .andExpect(status().isOk());
         mockMvc.perform((get("/user/query")))
                 .andExpect(jsonPath("$", hasSize(0)))
                 .andExpect(status().isOk());
-        mockMvc.perform((get("/rs/event")))
+        mockMvc.perform((get("/rs/events")))
                 .andExpect(jsonPath("$", hasSize(0)))
                 .andExpect(status().isOk());
 

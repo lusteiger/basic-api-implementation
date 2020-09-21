@@ -89,14 +89,14 @@ class RsControllerTest {
 
         eventEntity = eventRepository.save(eventEntity);
 
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].event", is("哈哈")))
                 .andExpect(jsonPath("$[0].keywords", is("娱乐")));
 
 
-        mockMvc.perform(get("/rs/query/1"))
+        mockMvc.perform(get("/rs/1/query/"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("event", is("哈哈")))
                 .andExpect(jsonPath("keywords", is("娱乐")));
@@ -142,10 +142,10 @@ class RsControllerTest {
 
         eventRepository.save(event2);
         eventRepository.save(event1);
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
-        mockMvc.perform(get("/rs/event?start=1&end=2"))
+        mockMvc.perform(get("/rs/events?start=1&end=2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
@@ -154,7 +154,7 @@ class RsControllerTest {
     @Test
     void should_add_rs_event_has_user() throws Exception {
 
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
@@ -193,7 +193,7 @@ class RsControllerTest {
         mockMvc.perform(post("/rs/eventAdd").content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].event", is("哈哈")))
@@ -204,7 +204,7 @@ class RsControllerTest {
     @Test
     void should_add_rs_event_without_user() throws Exception {
 
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
@@ -249,12 +249,12 @@ class RsControllerTest {
                 .user(userEntity)
                 .build();
         eventEntity = eventRepository.save(eventEntity);
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
-        mockMvc.perform(delete("/rs/event/Delete/{index}",eventEntity.getId()))
+        mockMvc.perform(delete("/rs/event/{index}/delete",eventEntity.getId()))
                 .andExpect(status().isOk());
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
@@ -293,13 +293,13 @@ class RsControllerTest {
         mockMvc.perform(get("/user/query"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
-        mockMvc.perform(put("/rs/update/" + eventEntity.getId()).content(json)
+        mockMvc.perform(put("/rs/{rsEventId}/update/", eventEntity.getId()).content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        mockMvc.perform((get("/rs/event")))
+        mockMvc.perform((get("/rs/events")))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("[0].id", is(eventEntity.getId())))
                 .andExpect(jsonPath("[0].event", is("芯片")))
@@ -342,13 +342,13 @@ class RsControllerTest {
         mockMvc.perform(get("/user/query"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
-        mockMvc.perform(put("/rs/update/" + eventEntity.getId()).content(json)
+        mockMvc.perform(put("/rs/{rsEventId}/update/", eventEntity.getId()).content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        mockMvc.perform((get("/rs/event")))
+        mockMvc.perform((get("/rs/events")))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("[0].id", is(eventEntity.getId())))
                 .andExpect(jsonPath("[0].event", is("芯片")))
@@ -389,13 +389,13 @@ class RsControllerTest {
         mockMvc.perform(get("/user/query"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
-        mockMvc.perform(put("/rs/update/" + eventEntity.getId()).content(json)
+        mockMvc.perform(put("/rs/{rsEventId}/update/" , eventEntity.getId()).content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        mockMvc.perform((get("/rs/event")))
+        mockMvc.perform((get("/rs/events")))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("[0].id", is(eventEntity.getId())))
                 .andExpect(jsonPath("[0].event", is("哈哈")))

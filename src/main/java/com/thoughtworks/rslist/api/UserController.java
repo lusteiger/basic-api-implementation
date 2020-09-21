@@ -37,13 +37,13 @@ public class UserController {
        return  ResponseEntity.ok( userList);
     }
 
-    @GetMapping("/user/query/{id}")
+    @GetMapping("/user/{id}/query")
     public ResponseEntity<Optional<UserEntity>> QueryUser(@PathVariable int id){
         return ResponseEntity.ok().body( userService.getUser(id));
     }
 
 
-    @DeleteMapping("/user/delete/{id}")
+    @DeleteMapping("/user/{id}/delete")
     public void DeleteUser(@PathVariable int id){
         userService.deleteById(id);
     }

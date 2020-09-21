@@ -15,8 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-
-@Component
+@Service
 public class UserService {
     @Autowired
     UserRepository userRepository;

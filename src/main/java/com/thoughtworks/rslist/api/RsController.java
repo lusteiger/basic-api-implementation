@@ -25,7 +25,7 @@ public class RsController {
 
 
 
-    @GetMapping("/rs/query/{index}")
+    @GetMapping("/rs/{index}/query/")
     private ResponseEntity<Event> getOneEvent(@PathVariable int index) {
 
             Event result = eventService.findById(index);
@@ -33,7 +33,7 @@ public class RsController {
 
     }
 
-    @GetMapping("/rs/event")
+    @GetMapping("/rs/events")
     private ResponseEntity<List<Event>> getStartUntilEnd
             (@RequestParam(required = false) Integer start,
              @RequestParam(required = false) Integer end) {
@@ -78,7 +78,7 @@ public class RsController {
         return responseEntity;
     }
 
-    @PutMapping("/rs/update/{rsEventId}")
+    @PutMapping("/rs/{rsEventId}/update/")
     private ResponseEntity ModifyEvent(@RequestBody Event events, @PathVariable int rsEventId)  {
 
 
@@ -97,7 +97,7 @@ public class RsController {
       return   responseEntity;
     }
 
-    @DeleteMapping("/rs/event/Delete/{index}")
+    @DeleteMapping("/rs/event/{index}/delete")
     private ResponseEntity DeleteEvent(@PathVariable int index) {
             ResponseEntity responseEntity =eventService.DeleteEventById(index);
             return responseEntity;

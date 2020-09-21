@@ -22,7 +22,7 @@ public class VoteController {
     @Autowired
     VoteService voteService;
 
-    @PostMapping("/rs/vote/{rsEventId}")
+    @PostMapping("/rs/{rsEventId}/vote")
     private ResponseEntity VoteEvent(@RequestBody Vote vote, @PathVariable int rsEventId) {
 
         VoteEntity voteEntity = VoteEntity.builder()
@@ -37,7 +37,7 @@ public class VoteController {
 
     }
 
-    @PostMapping("/rs/vote/range/")
+    @PostMapping("/rs/vote/range")
     public ResponseEntity<List<Vote>> VoteRangeList(@RequestParam(required = false) String start,
                                                     @RequestParam(required = false) String end) {
 

@@ -85,10 +85,10 @@ class VoteControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
 
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
-        mockMvc.perform(post("/rs/vote/{rsEventId}", eventEntity.getId())
+        mockMvc.perform(post("/rs/{rsEventId}/vote", eventEntity.getId())
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -134,10 +134,10 @@ class VoteControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
 
-        mockMvc.perform(get("/rs/event"))
+        mockMvc.perform(get("/rs/events"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
-        mockMvc.perform(post("/rs/vote/{rsEventId}", eventEntity.getId())
+        mockMvc.perform(post("/rs/{rsEventId}/vote", eventEntity.getId())
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
